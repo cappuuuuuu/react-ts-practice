@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { type ItemTypes } from './index'
+import { type ListItemTypes } from './index'
 
 const FormWrap = styled.div`
   margin-bottom: 30px;
@@ -39,23 +39,17 @@ const AddButton = styled.div`
 `
 
 interface FormProps {
-  value: ItemTypes[]
-  onClick: (value: ItemTypes[]) => void
+  onSubmit: (value: ListItemTypes) => void
 }
 
-function Form ({ value, onClick }: FormProps): JSX.Element {
+function Form ({ onSubmit }: FormProps): JSX.Element {
   const [inputValue, setInputValue] = useState<string>('')
 
   function addItem (): void {
-    const item = {
+    onSubmit({
       description: inputValue,
       isChecked: false
-    }
-
-    onClick([
-      ...value,
-      item
-    ])
+    })
 
     setInputValue('')
   }

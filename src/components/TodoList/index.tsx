@@ -27,12 +27,16 @@ export interface ListItemTypes {
 function TodoList (): JSX.Element {
   const [list, setList] = useState<ListItemTypes[]>([])
 
+  function submitHandler (value: ListItemTypes): void {
+    setList([
+      ...list,
+      value
+    ])
+  }
+
   return (
     <Container>
-      <Form
-        value={list}
-        onClick={o => { setList(o) }}
-      />
+      <Form onSubmit={submitHandler}/>
       <ListContainer>
         {
           list.map((v, index) => (

@@ -4,7 +4,7 @@ import {
   Delete,
   CheckBox
 } from '@mui/icons-material'
-import { type ItemTypes } from './index'
+import { type ListItemTypes } from './index'
 
 const Item = styled.div`
   display: flex;
@@ -17,7 +17,9 @@ const Item = styled.div`
 const Description = styled.div`
 `
 
-const Checkbox = styled(CheckBoxOutlineBlank)`
+const CheckboxWrap = styled.div`
+  display: flex;
+  align-items: center;
   margin-right: 6px;
   cursor: pointer;
 `
@@ -26,12 +28,14 @@ const DeleteButton = styled(Delete)`
   cursor: pointer;
 `
 
-function ListItem ({ value }: ItemTypes): JSX.Element {
+function ListItem ({ description, isChecked }: ListItemTypes): JSX.Element {
   return (
     <Item>
-      <Description>Learn React.js</Description>
+      <Description>{description}</Description>
       <div>
-        <Checkbox/>
+        <CheckboxWrap>
+          { isChecked ? <CheckBox/> : <CheckBoxOutlineBlank/>}
+        </CheckboxWrap>
         <DeleteButton/>
       </div>
     </Item>
