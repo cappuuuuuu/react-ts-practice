@@ -27,23 +27,41 @@ export interface ListItemTypes {
 function TodoList (): JSX.Element {
   const [list, setList] = useState<ListItemTypes[]>([])
 
-  function submitHandler (value: ListItemTypes): void {
+  function submitItem (value: ListItemTypes): void {
     setList([
       ...list,
       value
     ])
   }
 
+  function checkItem (itemIndex: number): void {
+    setList(list.map((item, index) => {
+      return (itemIndex === index)
+        ? {
+            ...item,
+            isChecked: !item.isChecked
+          }
+        : item
+    }))
+  }
+
+  function removeItem (itemIndex: number): void {
+    setList(list.filter((_, index) => itemIndex !== index))
+  }
+
   return (
     <Container>
-      <Form onSubmit={submitHandler}/>
+      <Form onSubmit={submitItem}/>
       <ListContainer>
         {
           list.map((v, index) => (
             <ListItem
               description={v.description}
               isChecked={v.isChecked}
+              index={index}
               key={index}
+              handleCheck={checkItem}
+              handleRemove={removeItem}
             />
           ))
         }

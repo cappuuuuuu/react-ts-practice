@@ -46,19 +46,32 @@ function Form ({ onSubmit }: FormProps): JSX.Element {
   const [inputValue, setInputValue] = useState<string>('')
 
   function addItem (): void {
+    const description = inputValue.trim()
+    if (description.length === 0) return
+
     onSubmit({
-      description: inputValue,
+      description,
       isChecked: false
     })
 
     setInputValue('')
   }
 
+  function handleKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
+    if (e.key === 'Enter') {
+      addItem()
+    }
+  }
+
   return (
     <FormWrap>
       <Title>Add to the todo list</Title>
       <InputWrap>
-        <Input value={inputValue} onChange={e => { setInputValue(e.target.value.trim()) }}/>
+        <Input
+          value={inputValue}
+          onChange={e => { setInputValue(e.target.value) }}
+          onKeyDown={handleKeyDown}
+        />
         <AddButton onClick={addItem}>ADD ITEM</AddButton>
       </InputWrap>
     </FormWrap>

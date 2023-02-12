@@ -1,10 +1,14 @@
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import {
   CheckBoxOutlineBlank,
   Delete,
   CheckBox
 } from '@mui/icons-material'
 import { type ListItemTypes } from './index'
+
+const strikeitem = keyframes`
+  to { width: calc(100% + 1rem); }
+`
 
 const Item = styled.div`
   display: flex;
@@ -14,13 +18,30 @@ const Item = styled.div`
   background: rgba(255,255,255,0.1);
 `
 
-const Description = styled.div`
+const Description = styled.div<{ isChecked: boolean }>`
+  position: relative;
+  max-width: 80%;
+  word-break: break-word;
+
+  ${props => props.isChecked && css`
+    opacity: 0.6;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -0.5rem;
+      display: block;
+      width: 0%;
+      height: 1px;
+      background: #FFF;
+      animation: ${strikeitem} .3s ease-out 0s forwards;
+    }
+  `}
 `
 
-const CheckboxWrap = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 6px;
+const CheckboxWrap = styled.span`
+  margin-right: 4px;
   cursor: pointer;
 `
 
@@ -28,15 +49,21 @@ const DeleteButton = styled(Delete)`
   cursor: pointer;
 `
 
-function ListItem ({ description, isChecked }: ListItemTypes): JSX.Element {
+interface ListItemProps extends ListItemTypes {
+  index: number
+  handleCheck: (index: number) => void
+  handleRemove: (index: number) => void
+}
+
+function ListItem ({ description, isChecked, index, handleCheck, handleRemove }: ListItemProps): JSX.Element {
   return (
     <Item>
-      <Description>{description}</Description>
+      <Description isChecked={isChecked}>{description}</Description>
       <div>
-        <CheckboxWrap>
+        <CheckboxWrap onClick={() => { handleCheck(index) }}>
           { isChecked ? <CheckBox/> : <CheckBoxOutlineBlank/>}
         </CheckboxWrap>
-        <DeleteButton/>
+        <DeleteButton onClick={() => { handleRemove(index) }}/>
       </div>
     </Item>
   )
